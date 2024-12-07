@@ -1,4 +1,4 @@
-# Charity Organization Event Website
+# Charity connect
 
 ## INTRO
 A membership website for charities written in Django.
