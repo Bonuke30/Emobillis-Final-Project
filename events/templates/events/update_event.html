@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Update this event{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+	<div class="text-center pb-4">
+		<h2 class="font-weight-bold">Update this event</h2>
+	</div>
+	<form method="post" enctype="multipart/form-data">
+  		{% csrf_token %}
+  		{{ form.as_p }}
+  	<button type="submit">Update event</button>
+	</form>
+</div>
+{% endblock %}

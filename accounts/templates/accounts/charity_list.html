@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}All Charities{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+	<div class="text-center pb-5">
+	    <h2 class="font-weight-bold">All charities</h2>
+    </div>
+    {% for user in users %}
+	<div class="row mb-5">
+		<div class="col-md-5 pb-4">
+			<h3>{{ user.charity_name }}</h3>
+			<img src="{{ user.charity_image.url }}" class="img-fluid" alt="{{ user.charity_name }}">
+		</div>
+		<div class="col-md-6 pb-4">
+			<h5 class="font-weight-bold">CHARITY BIO:</h5>
+			<hr>
+			<p class="card-text">{{ user.charity_bio|linebreaks }}</p>
+		</div>
+		<div class="col-md-4 shadow-sm bg-light p-3 mb-4">
+			<p class="card-text"><span class="font-weight-bold">COUNTRY: </span>{{ user.charity_country.name }}</p>
+		    <p class="card-text"><span class="font-weight-bold">OPERATING IN: </span>{{ user.get_charity_operating_continent_display }}</p>
+		    <p class="card-text"><span class="font-weight-bold">WEBSITE URL: </span><a href="{{ user.charity_website_url }}">
+		    {{ user.charity_website_url }}</p></a>
+		</div>
+		<div class="col-md-4 mb-4">
+			{% if user.event_set.all %}
+			<div class="font-weight-bold card-header">
+			    Upcoming Events
+			</div>
+			<ul class="list-group list-group-flush">
+				{% for event in user.event_set.all %}
+					{% if event.approved == True and event.date_in_future == True %}
+						<li class="list-group-item">
+							<a href="{% url 'events:event_detail' event.slug %}">
+						    	{{ event.event_name }}
+					    	</a>
+					    </li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+    </div>
+    <hr class="pb-3">
+    {% endfor %}
+</div>
+
+<div class="container pb-3">
+	{% if users.has_other_pages %}
+		<ul class="pagination">
+			{% if users.has_previous %}
+				<li class="page-item">
+					<a class="page-link" href="?page={{ users.previous_page_number }}">
+						Previous
+					</a>
+				</li>
+			{% endif %}
+			{% for i in users.paginator.page_range %}
+		        {% if users.number == i %}
+		        	<li class="page-item">
+		        		<a class="page-link">
+		        			<span>{{ i }}<span class="sr-only">(current)</span></span>
+		        		</a>
+		        	</li>
+		        {% else %}
+		            <li>
+		            	<a class="page-link" href="?page={{ i }}">{{ i }}</a>
+		            </li>
+		        {% endif %}
+		    {% endfor %}
+		    {% if users.has_next %}
+		    	<li class="page-item">
+		    		<a class="page-link" href="?page={{ users.next_page_number }}">Next</a>
+		    	</li>
+		    {% endif %}
+		</ul>
+	{% endif %}
+
+</div>
+
+{% endblock %}

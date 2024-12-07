@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Create a new event{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+	<div class="text-center pb-4">
+		<h2 class="font-weight-bold">New Event</h2>
+	</div>
+	<div class="alert-primary p-4 m-3">NOTE: We have to approve all charity signups before they go live on the website. Please allow up to 24 hours. Thank you.</div>
+	<form method="post" enctype="multipart/form-data">
+  		{% csrf_token %}
+  		{{ form.as_p }}
+  	<button type="submit">Create event</button>
+	</form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+<!--- django-countries requires calling of template tags ---->
+{% load countries %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+	
+	<div class="py-4">
+		<a href="{% url 'accounts:editprofile' %}">
+	    <button class="btn btn-primary">Edit your Profile</button>
+		</a>
+		<a href="{% url 'events:create_event' %}">
+	    <button class="btn btn-primary">Create an Event</button>
+		</a>
+	</div>
+
+	<h2 class="font-weight-bold">Your Profile</h2>
+
+	<p><strong>USERNAME: </strong>{{ current_user }}</p>
+	<p><strong>EMAIL: {{ current_user.email }}</strong></p>
+
+	<h2>Charity Information</h2>
+	<p><strong>CHARITY NAME: </strong>{{ current_user.charity_name }}</p>
+	<img src="{{ current_user.charity_image.url }}" class="img-fluid" style="max-width:200px; max-height:150px;" />
+	<p><strong>CHARITY ADDRESS:</strong></p>
+	<p>{{ current_user.charity_address_line_1 }}</p>
+	<p>{{ current_user.charity_address_line_2 }}</p>
+	<p>{{ current_user.charity_postcode }}</p>
+	<p><strong>COUNTRY: </strong>{{ current_user.charity_country.name }}</p>
+	<p><strong>OPERATING IN: </strong>{{ current_user.get_charity_operating_continent_display }}</p>
+
+	<p><strong>WEBSITE URL: </strong>{{ current_user.charity_website_url }}</p>
+	<p><strong>BIO (As seen by website visitors): </strong>{{ current_user.charity_bio|linebreaks}}</p>
+
+	<h1>Events:</h1>
+	<p>You currently have {{ num_events}} event/s created.</p>
+
+	{% for event in events %}
+	<h2>{{ event.event_name }}</h2>
+	<p>{{ event.event_description }}</p>
+	<p>{{ event.event_date }}</p>
+	<a href="{% url 'events:update_event' event.slug %}">Update this event</a>
+	<p>----------------</p>
+
+{% endfor %}
+</div>
+
+{% endblock %}

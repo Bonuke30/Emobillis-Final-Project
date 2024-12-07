@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}All events{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+	<div class="text-center pb-5">
+	    <h2 class="font-weight-bold">All events</h2>
+    </div>
+
+    {% if events %}
+
+	    <div class="row">
+		{% for event in events %}
+			<div class="col-md-4 mb-4">
+				<div class="card h-100">
+					<img src="{{ event.image.url }}" class="img-fluid card-img-top" style="max-height:200px;" />
+					<div class="card-body">
+						<a href="{{ event.get_absolute_url }}">
+							<h4>{{ event.event_name }}</h4>
+						</a>
+			    		<p>DATE: {{ event.event_date }}</p>
+			    		<p>CHARITY: {{ event.user.charity_name }}</p>
+			    		<p>{{ event.event_description|linebreaks }}</p>
+					</div>
+					<div class="card-footer">
+						<a href="{{ event.get_absolute_url }}">
+							<button class="btn btn-primary">Learn more</button>
+						</a>
+					</div>
+				</div>
+		  	</div>
+		{% endfor %}
+	    </div>
+
+	{% else %}
+		<div class="row">
+			<div class="col-12">
+				<p>Sorry, we don't have any upcoming events at the moment.</p>
+				<p class="lead">Please check back soon!</p>
+		    </div>
+		</div>
+	{% endif %}
+
+	{% if is_paginated %}
+		<ul class="pagination">
+			{% if page_obj.has_previous %}
+				<li class="page-item">
+					<a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+						Previous
+					</a>
+				</li>
+			{% endif %}
+			{% for i in paginator.page_range %}
+				{% if i == page_obj.number %}
+					<li class="page-item">
+						<a class="page-link">
+							{{ i }}
+						</a>
+					</li>
+				{% else %}
+					<li class="page-item">
+						<a class="page-link" href="?page={{ i }}">
+							{{ i }}
+						</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+			{% if page_obj.has_next %}
+				<li class="page-item">
+					<a class="page-link" href="?page={{ page_obj.next_page_number }}">
+						Next
+					</a>
+				</li>
+			{% endif %}
+		</ul>
+	{% endif %}
+
+</div>
+
+{% endblock %}
